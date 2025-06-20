@@ -1,15 +1,8 @@
 import React, { useState } from 'react';
 import {
-  Box, Button, TextField, Typography, MenuItem, Select, InputLabel, FormControl, Chip, Stack, Paper, Divider, Avatar, IconButton
+  Box, Button, TextField, Typography, MenuItem, Select, InputLabel, FormControl, Chip, Stack, Paper, Divider
 } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
 import TagIcon from '@mui/icons-material/Tag';
-import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
-import ReactQuill from 'react-quill';
-// import 'react-quill/dist/quill.snow.css';
-import { Picker } from 'emoji-mart';
-// import 'emoji-mart/dist/emoji-mart.css';
 
 const categories = ['Motivation', 'Nutrition', 'Workout Tips', 'Success Stories', 'Mental Health', 'Challenges'];
 const visibilities = ['Public', 'Private', 'Scheduled'];
@@ -30,7 +23,6 @@ const AddBlog = () => {
     metaDesc: '',
   });
   const [coverPreview, setCoverPreview] = useState('');
-  const [showEmoji, setShowEmoji] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,10 +39,6 @@ const AddBlog = () => {
     } else {
       setCoverPreview('');
     }
-  };
-
-  const handleContentChange = (value) => {
-    setForm((prev) => ({ ...prev, content: value }));
   };
 
   const handleTagInput = (e) => {
@@ -72,11 +60,6 @@ const AddBlog = () => {
     if (!form.tags.includes(tag)) {
       setForm((prev) => ({ ...prev, tags: [...prev.tags, tag] }));
     }
-  };
-
-  const handleEmojiSelect = (emoji) => {
-    setForm((prev) => ({ ...prev, content: prev.content + emoji.native }));
-    setShowEmoji(false);
   };
 
   const handleSubmit = (e) => {
@@ -102,33 +85,17 @@ const AddBlog = () => {
             <input type="file" accept="image/*" onChange={handleCoverChange} />
             {coverPreview && <img src={coverPreview} alt="cover preview" style={{ width: 200, marginTop: 8, borderRadius: 8 }} />}
           </Box>
-          <Box>
-            <Typography variant="subtitle1">Content</Typography>
-            <Box display="flex" alignItems="center" gap={1} mb={1}>
-              <IconButton onClick={() => setShowEmoji((v) => !v)} size="small"><InsertEmoticonIcon /></IconButton>
-              <Typography variant="caption">Add emojis, images, or embed YouTube/Instagram links in your post!</Typography>
-            </Box>
-            {showEmoji && (
-              <Box mb={1}>
-                <Picker onSelect={handleEmojiSelect} theme="light" style={{ width: 320 }} />
-              </Box>
-            )}
-            <ReactQuill
-              value={form.content}
-              onChange={handleContentChange}
-              theme="snow"
-              style={{ minHeight: 180 }}
-              modules={{
-                toolbar: [
-                  [{ header: [1, 2, false] }],
-                  ['bold', 'italic', 'underline', 'strike'],
-                  [{ list: 'ordered' }, { list: 'bullet' }],
-                  ['link', 'image'],
-                  ['clean'],
-                ],
-              }}
-            />
-          </Box>
+          <TextField
+            label="Content"
+            name="content"
+            value={form.content}
+            onChange={handleChange}
+            multiline
+            minRows={6}
+            required
+            fullWidth
+            placeholder="Write your blog post here..."
+          />
           <Box>
             <Typography variant="subtitle1">Tags / Hashtags</Typography>
             <Stack direction="row" spacing={1} alignItems="center">
